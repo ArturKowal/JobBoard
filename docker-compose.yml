@@ -1,0 +1,37 @@
+version: '3'
+services:
+  job_offer:
+    container_name: 'job_offer'
+    build: ./job_offer
+    ports:
+      - "7000:7000"
+    depends_on:
+      - database_job_offer
+    networks:
+      - job_offer_network
+    environment:
+      - spring.datasource.url=jdbc:postgresql://database_job_offer:5433/postgres
+  database_job_offer:
+    container_name: 'database_job_offer'
+    image: postgres
+    ports:
+      - "5433:5433"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=offer
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - dbstore:/var/lib/postgres
+    networks:
+      - job_offer_network
+
+volumes:
+  dbstore:
+
+networks:
+  job_offer_network:
