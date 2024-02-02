@@ -10,5 +10,5 @@ RUN ./mvnw clean install -DskipTests
 FROM eclipse-temurin:21-jre
 WORKDIR /opt/app
 COPY --from=builder /opt/app/target/*.jar /opt/app/*.jar
-EXPOSE 7000:7000
+EXPOSE 7000
 ENTRYPOINT ["java", "-jar", "/opt/app/*.jar"]
