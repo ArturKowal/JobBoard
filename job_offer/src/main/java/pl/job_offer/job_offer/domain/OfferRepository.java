@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Long> {
-    @Query("SELECT o FROM Offer o WHERE o.offerId IN :ids")
-    List<Offer> findSelectedOffers(List<Long> ids);
+    @Query("SELECT o FROM Offer o WHERE o.title LIKE LOWER(CONCAT('%', :key, '%'))")
+    List<Offer> findSelectedOffers(String key);
 }

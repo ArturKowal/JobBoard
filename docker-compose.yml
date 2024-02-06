@@ -5,6 +5,7 @@ services:
     build: ./job_offer
     ports:
       - "7000:7000"
+      - "5005:5005"
     depends_on:
       - database_job_offer
     networks:

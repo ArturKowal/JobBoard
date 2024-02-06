@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface OfferReviewer {
     OfferDto findOffer(String offerId);
-    List<OfferDto> findOffersByIds(List<String> offerId);
+    List<OfferDto> findOffersByKeys(List<String> keys);
     List<OfferDto> findRecentOffers(int numberOfRecentOffers);
 }

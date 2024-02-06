@@ -39,8 +39,8 @@ class OfferController {
     }
 
     @GetMapping
-    ResponseEntity<?> findSelectedOffers(@RequestParam List<String> ids) {
-        return ResponseEntity.ok(offerReviewer.findOffersByIds(ids));
+    ResponseEntity<?> findSelectedOffers(@RequestParam List<String> keys) {
+        return ResponseEntity.ok(offerReviewer.findOffersByKeys(keys));
     }
 
     @GetMapping("/recent/{number}")

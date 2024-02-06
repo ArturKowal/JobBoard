@@ -7,7 +7,9 @@ import pl.job_offer.job_offer.domain.Offer;
 import pl.job_offer.job_offer.domain.OfferRepository;
 import pl.job_offer.job_offer.domain.dto.OfferDto;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OfferReviewerImpl implements OfferReviewer {
@@ -29,14 +31,15 @@ public class OfferReviewerImpl implements OfferReviewer {
     }
 
     @Override
-    public List<OfferDto> findOffersByIds(List<String> offerIds) {
-        List<Offer> selectedOffers = offerRepository.findSelectedOffers(offerIds.stream().map(Long::parseLong).toList());
-        return selectedOffers.stream()
+    public List<OfferDto> findOffersByKeys(List<String> keys) {
+        return keys.stream()
+                .flatMap(key -> offerRepository.findSelectedOffers(key).stream())
                 .map(offer -> OfferDto.builder()
                         .title(offer.getTitle())
                         .description(offer.getDescription())
                         .salary(offer.getSalary())
-                        .build()).toList();
+                        .build())
+                .toList();
     }
 
     @Override
