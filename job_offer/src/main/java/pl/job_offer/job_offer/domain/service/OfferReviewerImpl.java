@@ -1,15 +1,12 @@
 package pl.job_offer.job_offer.domain.service;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.job_offer.job_offer.domain.Offer;
 import pl.job_offer.job_offer.domain.OfferRepository;
 import pl.job_offer.job_offer.domain.dto.OfferDto;
+import pl.job_offer.job_offer.domain.exception.NotExistingOfferException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OfferReviewerImpl implements OfferReviewer {
@@ -21,9 +18,10 @@ public class OfferReviewerImpl implements OfferReviewer {
     }
 
     @Override
-    public OfferDto findOffer(String offerId) {
-        Offer offer = offerRepository.findById(Long.parseLong(offerId)).get();
+    public OfferDto findOffer(String offerId) throws NotExistingOfferException {
+        Offer offer = offerRepository.findById(Long.parseLong(offerId)).orElseThrow(() -> new NotExistingOfferException("Test message"));
         return OfferDto.builder()
+                .offerId(offer.getOfferId())
                 .title(offer.getTitle())
                 .description(offer.getDescription())
                 .salary(offer.getSalary())
@@ -35,6 +33,7 @@ public class OfferReviewerImpl implements OfferReviewer {
         return keys.stream()
                 .flatMap(key -> offerRepository.findSelectedOffers(key).stream())
                 .map(offer -> OfferDto.builder()
+                        .offerId(offer.getOfferId())
                         .title(offer.getTitle())
                         .description(offer.getDescription())
                         .salary(offer.getSalary())
@@ -44,10 +43,10 @@ public class OfferReviewerImpl implements OfferReviewer {
 
     @Override
     public List<OfferDto> findRecentOffers(int numberOfRecentOffers) {
-        Pageable firstNElements = PageRequest.of(0, numberOfRecentOffers);
-        List<Offer> selectedOffers = offerRepository.findAll(firstNElements).getContent();
+        List<Offer> selectedOffers = offerRepository.findTopNByOrderByCreationDateDesc(numberOfRecentOffers);
         return selectedOffers.stream()
                 .map(offer -> OfferDto.builder()
+                        .offerId(offer.getOfferId())
                         .title(offer.getTitle())
                         .description(offer.getDescription())
                         .salary(offer.getSalary())

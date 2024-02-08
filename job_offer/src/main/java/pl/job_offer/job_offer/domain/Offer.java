@@ -34,6 +34,7 @@ public class Offer {
 
     String title;
 
+    @Column(length = 2000)
     String description;
 
     int salary;

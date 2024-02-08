@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OfferDto {
+    Long offerId;
     String title;
     String description;
     int salary;

@@ -1,15 +1,10 @@
 package pl.job_offer.job_offer.domain;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.job_offer.job_offer.domain.dto.OfferDto;
 import pl.job_offer.job_offer.domain.dto.OfferResponseDto;
+import pl.job_offer.job_offer.domain.exception.NotExistingOfferException;
 import pl.job_offer.job_offer.domain.service.OfferCreator;
 import pl.job_offer.job_offer.domain.service.OfferReviewer;
 
@@ -35,7 +30,12 @@ class OfferController {
 
     @GetMapping("/{id}")
     ResponseEntity<?> findOffer(@PathVariable String id) {
-        return ResponseEntity.ok(offerReviewer.findOffer(id));
+        // TODO do poprawy - użyć -> @ExceptionHandler(ExceptionXYZ.class)
+        try {
+            return ResponseEntity.ok(offerReviewer.findOffer(id));
+        } catch (NotExistingOfferException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping
