@@ -13,6 +13,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "offer")
@@ -23,13 +26,21 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Offer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "offer_id")
     Long offerId;
 
     String title;
+
+    @Column(length = 2000)
     String description;
+
     int salary;
+
+    @CreationTimestamp
+    @Column(name = "creation_date", nullable = false)
+    Date creationDate;
 
 }

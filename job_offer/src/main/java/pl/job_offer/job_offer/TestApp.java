@@ -14,7 +14,6 @@ class TestApp {
 
     @GetMapping("/test")
     String test() {
-        offerCreator.createOffer();
         return "test API";
     }
 
